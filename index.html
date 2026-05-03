@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Torre Esperanza – Acceso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body class="login-page">
+
+  <!-- Fondo decorativo -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <main class="login-container">
+
+    <!-- Panel izquierdo: identidad -->
+    <section class="login-brand">
+      <div class="brand-inner">
+        <div class="brand-icon">🏢</div>
+        <h1 class="brand-title">Torre<br><span>Esperanza</span></h1>
+        <p class="brand-tagline">Sistema de gestión de expensas,<br>consumo de agua y parqueos.</p>
+        <div class="brand-divider"></div>
+        <ul class="brand-features">
+          <li>📋 Control de expensas mensuales</li>
+          <li>💧 Consumo de agua por departamento</li>
+          <li>🅿️ Gestión de parqueos</li>
+          <li>👥 Acceso por rol (Admin / Propietario)</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Panel derecho: formulario -->
+    <section class="login-form-panel">
+      <div class="login-card">
+
+        <h2 class="form-title">Iniciar Sesión</h2>
+        <p class="form-subtitle">Ingresa tus credenciales para continuar</p>
+
+        <!-- Selector de rol -->
+        <div class="role-selector" style="flex-wrap:wrap;">
+          <button class="role-btn active" data-role="admin" onclick="selectRole('admin', this)">
+            🔑 Administrador
+          </button>
+          <button class="role-btn" data-role="propietario" onclick="selectRole('propietario', this)">
+            🏠 Propietario
+          </button>
+          <button class="role-btn" data-role="inquilino_parqueo" onclick="selectRole('inquilino_parqueo', this)">
+            🅿️ Parqueo
+          </button>
+        </div>
+
+        <div id="msg-error" class="mensaje error hidden"></div>
+        <div id="msg-ok" class="mensaje ok hidden"></div>
+
+        <div class="form-group">
+          <label for="usuario">Usuario</label>
+          <input type="text" id="usuario" placeholder="Ej: admin  /  2C  /  PARQ-2C" autocomplete="off"/>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <div class="password-wrap">
+            <input type="password" id="password" placeholder="••••••••"/>
+            <button type="button" class="toggle-pass" onclick="togglePass()">👁</button>
+          </div>
+        </div>
+
+        <button class="btn-login" onclick="iniciarSesion()">
+          <span>Ingresar</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+
+        <p class="demo-hint">
+          💡 <strong>Demo:</strong><br>
+          Admin: <code>admin</code> / <code>1234</code><br>
+          Propietario: <code>2C</code> o <code>6A</code> / <code>1234</code><br>
+          Parqueo: <code>PARQ2</code> o <code>PARQ17</code> / <code>1234</code>
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/auth.js"></script>
+</body>
+</html>

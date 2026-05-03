@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Torre Esperanza – Mi Cuenta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+<div class="app-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🏢</div>
+      <h2>Torre<br><span>Esperanza</span></h2>
+      <p id="sideSubtitle">Mi Cuenta</p>
+    </div>
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Mi cuenta</span>
+      <button class="nav-item active" onclick="ir('inicio',this)"><span class="nav-icon">🏠</span>Inicio</button>
+      <button class="nav-item" onclick="ir('historial',this)"><span class="nav-icon">📋</span>Historial de Pagos</button>
+      <button class="nav-item" id="navAgua" onclick="ir('agua',this)"><span class="nav-icon">💧</span>Consumo de Agua</button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-badge">
+        <div class="user-avatar" id="avatarU">?</div>
+        <div class="user-info"><p id="nombreU">—</p><small id="rolU">—</small></div>
+      </div>
+      <button class="btn-logout" onclick="cerrarSesion()">🚪 Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- ── INICIO ── -->
+    <section id="sec-inicio" class="seccion">
+      <div class="page-header">
+        <h1 id="tituloInicio">Mi Cuenta</h1>
+        <p>Torre Esperanza — Estado actual</p>
+      </div>
+
+      <div class="stats-grid" id="statsInicio"></div>
+
+      <div class="panel" style="max-width:620px;">
+        <div class="panel-header"><h3 id="tituloDesglose">Desglose — Mes Actual</h3></div>
+        <div class="panel-body">
+          <table>
+            <thead><tr><th>Concepto</th><th>Corresponde a</th><th>Monto</th></tr></thead>
+            <tbody id="bodyDesglose"></tbody>
+          </table>
+          <div id="alertaPago" style="margin-top:16px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── HISTORIAL ── -->
+    <section id="sec-historial" class="seccion hidden">
+      <div class="page-header">
+        <h1>Historial de Pagos</h1>
+        <p>Registro de todos los pagos de tu unidad</p>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><h3>Pagos registrados</h3></div>
+        <div class="panel-body">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Mes/Año</th><th>Tipo</th><th>Monto</th><th>Pagado por</th><th>Fecha</th><th>Nota</th></tr></thead>
+              <tbody id="bodyHistorial"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── AGUA ── -->
+    <section id="sec-agua" class="seccion hidden">
+      <div class="page-header">
+        <h1>Consumo de Agua</h1>
+        <p>Historial de lecturas y costos de tu departamento</p>
+      </div>
+      <div class="panel" style="max-width:600px;">
+        <div class="panel-header"><h3>Tarifa EPSAS aplicada</h3></div>
+        <div class="panel-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+            <div style="background:var(--cream);border-radius:8px;padding:14px;text-align:center;">
+              <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;">Bloque básico</div>
+              <div style="font-family:var(--font-display);font-size:22px;color:var(--navy);">0–10 m³</div>
+              <div style="font-weight:600;color:var(--gold);">Bs 1.90/m³</div>
+            </div>
+            <div style="background:var(--cream);border-radius:8px;padding:14px;text-align:center;">
+              <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;">Excedente</div>
+              <div style="font-family:var(--font-display);font-size:22px;color:var(--navy);">+10 m³</div>
+              <div style="font-weight:600;color:var(--red);">Bs 3.90/m³</div>
+            </div>
+            <div style="background:var(--cream);border-radius:8px;padding:14px;text-align:center;">
+              <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;">Cargo fijo</div>
+              <div style="font-family:var(--font-display);font-size:22px;color:var(--navy);">Servicio</div>
+              <div style="font-weight:600;color:var(--navy);">Bs 1.00</div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Mes/Año</th><th>Anterior</th><th>Actual</th><th>Consumo</th><th>Detalle</th><th>Costo</th></tr></thead>
+              <tbody id="bodyAgua"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/propietario.js"></script>
+</body>
+</html>

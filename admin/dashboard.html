@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Torre Esperanza – Administrador</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+<div class="app-layout">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🏢</div>
+      <h2>Torre<br><span>Esperanza</span></h2>
+      <p>Administrador</p>
+    </div>
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Principal</span>
+      <button class="nav-item active" onclick="ir('resumen',this)"><span class="nav-icon">📊</span>Resumen General</button>
+      <button class="nav-item" onclick="ir('planilla',this)"><span class="nav-icon">📋</span>Planilla de Cobros</button>
+
+      <span class="nav-section-label">Registros</span>
+      <button class="nav-item" onclick="ir('agua',this)"><span class="nav-icon">💧</span>Lecturas de Agua</button>
+      <button class="nav-item" onclick="ir('pagos',this)"><span class="nav-icon">✅</span>Registrar Pago</button>
+      <button class="nav-item" onclick="ir('parqueos',this)"><span class="nav-icon">🅿️</span>Parqueos</button>
+
+      <span class="nav-section-label">Gestión</span>
+      <button class="nav-item" onclick="ir('unidades',this)"><span class="nav-icon">🏠</span>Propietarios / Inquilinos</button>
+      <button class="nav-item" onclick="ir('config',this)"><span class="nav-icon">⚙️</span>Configuración</button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-badge">
+        <div class="user-avatar">A</div>
+        <div class="user-info"><p>Administrador</p><small>Acceso total</small></div>
+      </div>
+      <button class="btn-logout" onclick="cerrarSesion()">🚪 Cerrar sesión</button>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN ═══ -->
+  <main class="main-content">
+
+    <!-- ══ RESUMEN ══ -->
+    <section id="sec-resumen" class="seccion">
+      <div class="page-header">
+        <h1>Resumen General</h1>
+        <p id="subtituloMes">Cargando…</p>
+      </div>
+      <div class="stats-grid" id="statsCards"></div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Estado de Pagos — Mes Actual</h3>
+          <div style="display:flex;gap:8px;">
+            <select id="filtroMesRes" onchange="renderResumen()" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:var(--font-body);font-size:13px;">
+              <option>Enero</option><option>Febrero</option><option selected>Marzo</option>
+              <option>Abril</option><option>Mayo</option><option>Junio</option>
+              <option>Julio</option><option>Agosto</option><option>Septiembre</option>
+              <option>Octubre</option><option>Noviembre</option><option>Diciembre</option>
+            </select>
+            <input type="number" id="filtroAnioRes" value="2026" onchange="renderResumen()" style="width:72px;padding:6px 8px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;"/>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Unidad</th>
+                  <th>Tipo</th>
+                  <th>Propietario / Inquilino</th>
+                  <th>Expensa</th>
+                  <th>Agua (m³)</th>
+                  <th>Parqueo</th>
+                  <th>Mora</th>
+                  <th>Total</th>
+                  <th>Pagado</th>
+                  <th>Saldo</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody id="bodyResumen"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ PLANILLA ══ -->
+    <section id="sec-planilla" class="seccion hidden">
+      <div class="page-header">
+        <h1>Planilla de Cobros</h1>
+        <p>Vista completa similar a la planilla física del edificio</p>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Planilla Detallada</h3>
+          <div style="display:flex;gap:8px;">
+            <select id="planMes" onchange="renderPlanilla()" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:var(--font-body);font-size:13px;">
+              <option>Enero</option><option>Febrero</option><option selected>Marzo</option>
+              <option>Abril</option><option>Mayo</option><option>Junio</option>
+              <option>Julio</option><option>Agosto</option><option>Septiembre</option>
+              <option>Octubre</option><option>Noviembre</option><option>Diciembre</option>
+            </select>
+            <input type="number" id="planAnio" value="2026" onchange="renderPlanilla()" style="width:72px;padding:6px 8px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;"/>
+          </div>
+        </div>
+        <div class="panel-body" style="padding:0;">
+          <div class="table-wrap">
+            <table id="tablaPlanilla">
+              <thead>
+                <tr>
+                  <th>DPTO</th>
+                  <th>Propietario</th>
+                  <th>Inquilino</th>
+                  <th>Expensa</th>
+                  <th>Parqueo(s)</th>
+                  <th>Agua m³</th>
+                  <th>Costo Agua</th>
+                  <th>Mora 2%</th>
+                  <th>TOTAL</th>
+                  <th>Pagado</th>
+                  <th>SALDO</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody id="bodyPlanilla"></tbody>
+              <tfoot id="footPlanilla"></tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ AGUA ══ -->
+    <section id="sec-agua" class="seccion hidden">
+      <div class="page-header">
+        <h1>Lecturas de Agua</h1>
+        <p>Registra las lecturas del medidor de cada departamento</p>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Ingresar Lecturas</h3>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select id="aguaMes" style="padding:6px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:var(--font-body);font-size:13px;">
+              <option>Enero</option><option>Febrero</option><option selected>Marzo</option>
+              <option>Abril</option><option>Mayo</option><option>Junio</option>
+              <option>Julio</option><option>Agosto</option><option>Septiembre</option>
+              <option>Octubre</option><option>Noviembre</option><option>Diciembre</option>
+            </select>
+            <input type="number" id="aguaAnio" value="2026" style="width:72px;padding:6px 8px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;"/>
+            <button class="btn btn-primary btn-sm" onclick="cargarAgua()">Cargar mes</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Depto</th>
+                  <th>Inquilino</th>
+                  <th>Lectura Anterior (m³)</th>
+                  <th>Lectura Actual (m³)</th>
+                  <th>Consumo (m³)</th>
+                  <th>Detalle tarifa</th>
+                  <th>Costo Agua (Bs)</th>
+                </tr>
+              </thead>
+              <tbody id="bodyAgua"></tbody>
+            </table>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:10px;">
+            <button class="btn btn-primary" onclick="guardarAgua()">💾 Guardar lecturas</button>
+            <div id="msgAgua" style="line-height:36px;font-size:13px;color:var(--green);"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ PAGOS ══ -->
+    <section id="sec-pagos" class="seccion hidden">
+      <div class="page-header">
+        <h1>Registrar Pago</h1>
+        <p>Registra un pago recibido de propietario, inquilino o parqueo</p>
+      </div>
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-header"><h3>Nuevo Pago</h3></div>
+          <div class="panel-body">
+            <div class="form-row">
+              <div class="form-field">
+                <label>Unidad</label>
+                <select id="pagoUnidad" onchange="calcularPagoSugerido()"></select>
+              </div>
+              <div class="form-field">
+                <label>Tipo de pago</label>
+                <select id="pagoTipo">
+                  <option value="mixto">Mixto (todo junto)</option>
+                  <option value="expensa">Solo Expensa</option>
+                  <option value="agua">Solo Agua</option>
+                  <option value="parqueo">Solo Parqueo</option>
+                  <option value="mora">Mora</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label>Mes</label>
+                <select id="pagoMes">
+                  <option>Enero</option><option>Febrero</option><option selected>Marzo</option>
+                  <option>Abril</option><option>Mayo</option><option>Junio</option>
+                  <option>Julio</option><option>Agosto</option><option>Septiembre</option>
+                  <option>Octubre</option><option>Noviembre</option><option>Diciembre</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label>Año</label>
+                <input type="number" id="pagoAnio" value="2026"/>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label>Monto (Bs)</label>
+                <input type="number" id="pagoMonto" step="0.01"/>
+              </div>
+              <div class="form-field">
+                <label>Pagado por</label>
+                <select id="pagadoPor">
+                  <option value="propietario">Propietario</option>
+                  <option value="inquilino">Inquilino</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row full">
+              <div class="form-field">
+                <label>Nota (opcional)</label>
+                <input type="text" id="pagoNota" placeholder="Ej: Pago en efectivo, cheque #123…"/>
+              </div>
+            </div>
+
+            <div id="sugerenciaPago" style="background:#f9f7f3;border:1px dashed var(--border);border-radius:8px;padding:12px;margin-bottom:16px;font-size:13px;"></div>
+
+            <button class="btn btn-primary" onclick="registrarPago()">✅ Registrar Pago</button>
+            <div id="msgPago" style="margin-top:8px;font-size:13px;color:var(--green);"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header"><h3>Últimos Pagos Registrados</h3></div>
+          <div class="panel-body">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Unidad</th><th>Mes/Año</th><th>Tipo</th><th>Monto</th><th>Quien pagó</th><th>Fecha</th></tr></thead>
+                <tbody id="bodyUltimosPagos"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ PARQUEOS ══ -->
+    <section id="sec-parqueos" class="seccion hidden">
+      <div class="page-header">
+        <h1>Parqueos Sueltos</h1>
+        <p>Parqueos numerados alquilados a terceros por propietarios</p>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><h3>Estado de Parqueos</h3></div>
+        <div class="panel-body">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Parqueo</th><th>Inquilino</th><th>Teléfono</th><th>Cuota mensual</th><th>Estado Marzo 2026</th><th></th></tr></thead>
+              <tbody id="bodyParqueos"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ UNIDADES ══ -->
+    <section id="sec-unidades" class="seccion hidden">
+      <div class="page-header">
+        <h1>Propietarios e Inquilinos</h1>
+        <p>Información de contacto y asignación de parqueos por departamento</p>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Departamentos y Locales</h3>
+          <span style="font-size:12px;color:var(--text-muted);">Haz clic en ✏️ para editar</span>
+        </div>
+        <div class="panel-body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Unidad</th><th>Propietario</th><th>Tel. Prop.</th>
+                  <th>Inquilino</th><th>Tel. Inq.</th>
+                  <th>Parqueos propios</th><th></th>
+                </tr>
+              </thead>
+              <tbody id="bodyUnidades"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CONFIGURACIÓN ══ -->
+    <section id="sec-config" class="seccion hidden">
+      <div class="page-header">
+        <h1>Configuración</h1>
+        <p>Montos y parámetros del edificio</p>
+      </div>
+      <div class="panel" style="max-width:500px;">
+        <div class="panel-header"><h3>Parámetros Generales</h3></div>
+        <div class="panel-body">
+          <div class="form-row">
+            <div class="form-field">
+              <label>Expensa Departamento (Bs/mes)</label>
+              <input type="number" id="cfgExpDepto" step="0.01"/>
+            </div>
+            <div class="form-field">
+              <label>Expensa Local (Bs/mes)</label>
+              <input type="number" id="cfgExpLocal" step="0.01"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Cuota Parqueo (Bs/mes)</label>
+              <input type="number" id="cfgParqueo" step="0.01"/>
+            </div>
+            <div class="form-field">
+              <label>Mora mensual (%)</label>
+              <input type="number" id="cfgMora" step="0.1" min="0" max="10"/>
+            </div>
+          </div>
+          <div style="background:#f9f7f3;border-radius:8px;padding:14px;margin-bottom:16px;font-size:13px;color:var(--text-muted);">
+            <strong>Tarifa EPSAS (agua):</strong><br>
+            • 0–10 m³ → Bs 1.90/m³ + cargo fijo Bs 1.00<br>
+            • +10 m³ → Bs 3.90/m³ (excedente)<br>
+            <em>Esta tarifa es fija según normativa EPSAS.</em>
+          </div>
+          <button class="btn btn-primary" onclick="guardarConfig()">💾 Guardar configuración</button>
+          <div id="msgConfig" style="margin-top:8px;font-size:13px;color:var(--green);"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/admin.js"></script>
+</body>
+</html>
