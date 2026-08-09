@@ -1,4 +1,4 @@
-# 🏢 Torre Esperanza — Sistema de Gestión Web
+# 🏢 Sistema de Gestión Web
 
 Sistema web para la gestión de **expensas**, **consumo de agua** y **parqueos** del edificio Torre Esperanza.
 
